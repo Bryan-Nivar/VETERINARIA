@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRYAN-CATS // Bio-Reparación Canina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #00f2ff;
+            --text: #e0e0e0;
+            --card-bg: rgba(20, 20, 20, 0.7);
+            --border: rgba(0, 242, 255, 0.3);
+        }
+
+        @media (prefers-color-scheme: light) {
+            :root {
+                --bg: #f0f4f8;
+                --accent: #6200ee;
+                --text: #1a1a1a;
+                --card-bg: rgba(255, 255, 255, 0.8);
+                --border: rgba(98, 0, 238, 0.2);
+            }
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        h1, h2, .font-orbitron { font-family: 'Orbitron', sans-serif; }
+
+        /* --- VFX: GRID & SCANNER --- */
+        #grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            transform: perspective(500px) rotateX(60deg);
+            transform-origin: center top;
+            transition: transform 0.1s ease-out;
+        }
+
+        .scanner-line {
+            position: fixed;
+            top: -10%; left: 0; width: 100%; height: 2px;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            z-index: 100;
+            opacity: 0.5;
+            animation: scan 10s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+
+        /* --- GLITCH ANIMATION --- */
+        .glitch {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            2% { transform: translate(-2px, 2px); text-shadow: 2px 0 red, -2px 0 blue; }
+            4% { transform: translate(0); text-shadow: none; }
+        }
+
+        /* --- PORTAL BUTTON --- */
+        .portal-btn {
+            position: relative;
+            background: #000;
+            padding: 2px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        .portal-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, var(--accent), transparent 30%);
+            animation: rotate 4s linear infinite;
+        }
+        .portal-inner {
+            position: relative;
+            background: var(--bg);
+            padding: 0.5rem 1.5rem;
+            display: block;
+            border-radius: 3px;
+            z-index: 1;
+        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        /* --- UI COMPONENTS --- */
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+
+        .neon-focus:focus {
+            outline: none;
+            box-shadow: 0 0 15px var(--accent);
+            border-color: var(--accent);
+        }
+
+        marquee { font-weight: bold; text-transform: uppercase; }
+
+        .terminal {
+            background: #0a0a0a;
+            border: 2px solid #333;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 20px;
+            box-shadow: inset 0 0 20px #000;
+        }
+        
+        .noise-avatar {
+            filter: grayscale(1) contrast(1.2) brightness(1.1);
+            position: relative;
+        }
+        .noise-avatar::after {
+            content: "";
+            position: absolute;
+            top:0; left:0; width:100%; height:100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.2; pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="grid-bg"></div>
+    <div class="scanner-line"></div>
+
+    <nav class="fixed top-0 w-full z-50 glass px-6 py-4 flex justify-between items-center">
+        <div class="text-2xl font-black font-orbitron glitch" style="color: var(--accent)">
+            N-VET <span class="text-xs opacity-50 tracking-tighter">BRYAN-CATS</span>
+        </div>
+        <div class="hidden md:flex space-x-8 text-sm font-bold uppercase tracking-widest">
+            <a href="#" class="hover:text-[var(--accent)] transition-colors">// Inicio</a>
+            <a href="#servicios" class="hover:text-[var(--accent)] transition-colors">// Bio-Servicios</a>
+            <a href="#" class="hover:text-[var(--accent)] transition-colors">// Staff-Cyborg</a>
+            <a href="#contacto" class="hover:text-[var(--accent)] transition-colors">// Terminal</a>
+        </div>
+        <button class="portal-btn" onmouseover="playBeep()">
+            <span class="portal-inner text-xs font-bold uppercase tracking-tighter">Portal Neural</span>
+        </button>
+    </nav>
+
+    <header class="pt-32 pb-20 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div>
+            <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 uppercase">
+                VETERINARIA <br><span style="color: var(--accent)">BIODIGITAL</span>
+            </h1>
+            <p class="text-lg opacity-80 border-l-4 border-[var(--accent)] pl-4 mb-8">
+                Expertos en reparación canina de alta fidelidad, integración de hardware cortical y mejoras genéticas Clase-A.
+            </p>
+            <div class="flex gap-4">
+                <button class="bg-[var(--accent)] text-black font-bold px-8 py-3 rounded-sm hover:brightness-125 transition-all">INICIAR ESCANEO</button>
+                <button class="border border-[var(--border)] px-8 py-3 rounded-sm hover:bg-[var(--border)] transition-all">LOGS DE SISTEMA</button>
+            </div>
+        </div>
+        <div class="relative group">
+            <div class="absolute -inset-1 bg-[var(--accent)] opacity-20 blur-2xl group-hover:opacity-40 transition"></div>
+            <img src="big-dogs-small-dogs.jpg" alt="Cyber Dog" class="relative rounded-lg border-2 border-[var(--border)] grayscale hover:grayscale-0 transition-all duration-700">
+            <div class="absolute top-4 right-4 bg-black/80 p-2 text-[10px] border border-[var(--accent)] animate-pulse">
+                STATUS: ANALISANDO...
+            </div>
+        </div>
+    </header>
+
+    <div class="w-full bg-black py-3 border-y border-[var(--border)] overflow-hidden">
+        <marquee scrollamount="12" class="text-[var(--accent)] text-sm tracking-[0.3em]">
+            [ PERROS Y GATOS Y DEMAS ] &nbsp;&nbsp;&nbsp; [ URGENCIAS 24/7 ] &nbsp;&nbsp;&nbsp; [ SECTOR 4: CLINICA MÓVIL DISPONIBLE ] &nbsp;&nbsp;&nbsp; [ SANTO DOMINGO ] &nbsp;&nbsp;&nbsp; [ VILLA ALTAGRACIA ] &nbsp;&nbsp;&nbsp; [ SANTIAGO ]
+        </marquee>
+    </div>
+
+    <section id="servicios" class="py-24 px-6 max-w-7xl mx-auto">
+        <h2 class="text-3xl font-black mb-12 text-center uppercase tracking-widest underline decoration-[var(--accent)] underline-offset-8">Bio-Protocolos de Mejora</h2>
+        
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="glass p-8 group hover:border-[var(--accent)] transition-all">
+                <div class="text-xs mb-4 opacity-50">PROT_01</div>
+                <h3 class="text-xl font-bold mb-4 uppercase">Sintonización Neuronal</h3>
+                <p class="text-sm opacity-70">Calma el estrés post-traumático via chip cortical. Estabilidad emocional del 99.9%.</p>
+            </div>
+            <div class="glass p-8 group hover:border-[var(--accent)] transition-all">
+                <div class="text-xs mb-4 opacity-50">PROT_02</div>
+                <h3 class="text-xl font-bold mb-4 uppercase">Prótesis Titanio-C</h3>
+                <p class="text-sm opacity-70">Extremidades de alto rendimiento. Salto vertical aumentado un 400%.</p>
+            </div>
+            <div class="glass p-8 group hover:border-[var(--accent)] transition-all">
+                <div class="text-xs mb-4 opacity-50">PROT_03</div>
+                <h3 class="text-xl font-bold mb-4 uppercase">Purificación ADN</h3>
+                <p class="text-sm opacity-70">Eliminación de virus sintéticos y parásitos digitales en tiempo real.</p>
+            </div>
+            <div class="glass p-8 group hover:border-[var(--accent)] transition-all">
+                <div class="text-xs mb-4 opacity-50">PROT_04</div>
+                <h3 class="text-xl font-bold mb-4 uppercase">Visión Nocturna+</h3>
+                <p class="text-sm opacity-70">Actualización ocular para felinos con filtros térmicos y HUD integrado.</p>
+            </div>
+            <div class="glass p-8 group hover:border-[var(--accent)] transition-all">
+                <div class="text-xs mb-4 opacity-50">PROT_05</div>
+                <h3 class="text-xl font-bold mb-4 uppercase">Traductor Inter-Especies</h3>
+                <p class="text-sm opacity-70">Módulo de voz sintética para decodificar impulsos neuronales de comunicación.</p>
+            </div>
+            <div class="glass p-8 group hover:border-[var(--accent)] transition-all">
+                <div class="text-xs mb-4 opacity-50">PROT_06</div>
+                <h3 class="text-xl font-bold mb-4 uppercase">Criogenia Temporal</h3>
+                <p class="text-sm opacity-70">Suspensión animada garantizada para viajes interplanetarios de larga duración.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-black/40">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-2xl font-bold mb-10 text-[var(--accent)] uppercase font-orbitron">Archivo de Sujetos // Logs</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="border-l-2 border-gray-700 p-6 relative">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gray-800 noise-avatar border border-[var(--accent)]"></div>
+                        <div>
+                            <p class="font-bold text-xs uppercase">Unit-042</p>
+                            <p class="text-[10px] opacity-50">Propietario de Rex (Doberman v.2)</p>
+                        </div>
+                    </div>
+                    <p class="text-sm italic opacity-80">"El implante de cadera en titanio-carbono le permite patrullar el sector 7 sin fatiga. Increíble servicio."</p>
+                    <div class="mt-4 flex text-[var(--accent)] text-xs">★★★★★</div>
+                </div>
+                <div class="border-l-2 border-gray-700 p-6 relative">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-gray-800 noise-avatar border border-[var(--accent)]"></div>
+                        <div>
+                            <p class="font-bold text-xs uppercase">Unit-881</p>
+                            <p class="text-[10px] opacity-50">Caretaker de Luna (Siames Cyber)</p>
+                        </div>
+                    </div>
+                    <p class="text-sm italic opacity-80">"La purificación de ADN salvó sus circuitos biológicos tras el ataque del gusano SQL."</p>
+                    <div class="mt-4 flex text-[var(--accent)] text-xs">★★★★★</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="py-24 px-6 max-w-3xl mx-auto">
+        <div class="terminal">
+            <div class="flex justify-between border-b border-gray-800 pb-2 mb-6 text-[10px] uppercase opacity-50">
+                <span>> Neural-Vet Terminal v4.0.2</span>
+                <span>ENC-TYPE: RSA-4096</span>
+            </div>
+            <form class="space-y-6">
+                <div>
+                    <label class="block text-xs mb-2 text-[var(--accent)] font-bold">NOMBRE_USUARIO:</label>
+                    <input type="text" class="w-full bg-black border border-gray-800 p-2 neon-focus text-sm" placeholder="root_owner...">
+                </div>
+                <div>
+                    <label class="block text-xs mb-2 text-[var(--accent)] font-bold">TIPO_DE_BIO_ERROR:</label>
+                    <textarea class="w-full bg-black border border-gray-800 p-2 neon-focus text-sm h-32" placeholder="Describa el fallo biótico o actualización requerida..."></textarea>
+                </div>
+                <button type="submit" onclick="playClick(event)" class="w-full bg-[var(--accent)] text-black font-black py-4 uppercase tracking-widest hover:brightness-110">
+                    ENVIAR REPORTE_
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-black py-16 px-6 border-t border-gray-900">
+        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 text-xs">
+            <div>
+                <h4 class="font-bold mb-6 text-[var(--accent)] uppercase">Status Red</h4>
+                <p class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                    Estado Satélites: CONECTADO
+                </p>
+                <p class="mt-2 opacity-50">Ubicación: Sector Industrial 09</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-[var(--accent)] uppercase">Protocolos</h4>
+                <ul class="space-y-2 opacity-60">
+                    <li><a href="#">Privacidad de Datos</a></li>
+                    <li><a href="#">Garantía de Hardware</a></li>
+                    <li><a href="#">Términos de Servicio</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-[var(--accent)] uppercase">N-Link</h4>
+                <ul class="space-y-2 opacity-60">
+                    <li><a href="#">Neural-Net</a></li>
+                    <li><a href="#">Deep-Web Port</a></li>
+                    <li><a href="#">Bio-Github</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-6 text-[var(--accent)] uppercase">Suscripción Neural</h4>
+                <div class="flex">
+                    <input type="email" placeholder="email@.com" class="bg-[#111] border border-gray-800 p-2 w-full neon-focus">
+                    <button class="bg-gray-800 px-4">OK</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-16 opacity-30 text-[10px] tracking-widest">
+            © 2026 NEURAL-VET CLINIC - NO RIGHTS RESERVED - BY BRYAN NÍVAR AND IA
+        </div>
+    </footer>
+
+    <script>
+        // Audio Context para Feedback Sonoro
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playBeep() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.1);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        function playClick(e) {
+            e.preventDefault();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.2);
+            alert("SISTEMA: Reporte enviado con éxito.");
+        }
+
+        // Efecto de movimiento de Grid con el ratón
+        document.addEventListener('mousemove', (e) => {
+            const grid = document.getElementById('grid-bg');
+            const x = (window.innerWidth / 2 - e.pageX) / 25;
+            const y = (window.innerHeight / 2 - e.pageY) / 25;
+            grid.style.transform = `perspective(500px) rotateX(60deg) translate(${x}px, ${y}px)`;
+        });
+
+        // Notificación de cambio de esquema de color
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            console.log("SISTEMA: Detectado cambio en luz ambiental. Adaptando óptica...");
+        });
+    </script>
+</body>
+</html>
